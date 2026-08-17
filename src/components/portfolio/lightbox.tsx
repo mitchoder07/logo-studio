@@ -3,7 +3,8 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import type { Logo } from '@/data/logos';
 
 interface LightboxProps {
@@ -13,11 +14,16 @@ interface LightboxProps {
   onNavigate: (next: number) => void;
 }
 
+/**
+ * Full-screen lightbox. Opens when a logo card is clicked.
+ * Esc, arrow keys, and prev/next buttons all work.
+ * Confidential logos show a blurred preview with a lock badge.
+ */
 export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
-  // Lock body scroll while open
+  // Stop the page from scrolling behind the lightbox
   React.useEffect(() => {
     if (index === null) return;
     const prev = document.body.style.overflow;
@@ -125,19 +131,45 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           <div className="relative aspect-square w-full max-w-[55vh] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
             <Image
               src={`/logos/${logo.slug}.png`}
-              alt={`${logo.name} — ${logo.style} logo for ${logo.industry}`}
+              alt={
+                logo.confidential
+                  ? `Confidential client work — ${logo.industry}`
+                  : `${logo.name} — ${logo.style} logo for ${logo.industry}`
+              }
               fill
               sizes="(max-width: 1024px) 90vw, 50vw"
-              className="object-contain"
+              className={cn(
+                'object-contain',
+                logo.confidential && 'blur-xl brightness-50'
+              )}
               priority
             />
+            {logo.confidential && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="flex flex-col items-center gap-3 rounded-2xl border border-amber-500/40 bg-black/60 px-8 py-6 backdrop-blur-md">
+                  <Lock className="h-8 w-8 text-amber-400" strokeWidth={1.5} />
+                  <span className="font-display text-lg font-bold text-amber-400" style={{ fontFamily: 'var(--font-serif), Georgia, serif' }}>
+                    Confidential
+                  </span>
+                  <span className="text-xs text-amber-200/70 text-center max-w-[200px]">
+                    Under client NDA. Full case study available on request.
+                  </span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Info panel */}
           <aside className="text-white space-y-6 max-h-[70vh] overflow-y-auto pr-1">
             <div>
-              <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-2">
+              <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-2 flex items-center gap-2">
                 {logo.industry} · {logo.year}
+                {logo.confidential && (
+                  <span className="inline-flex items-center gap-1 text-amber-400">
+                    <Lock className="h-3 w-3" strokeWidth={1.5} />
+                    NDA
+                  </span>
+                )}
               </div>
               <h2
                 className="text-3xl sm:text-4xl leading-tight"
@@ -150,50 +182,77 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
               </h2>
             </div>
 
-            <div className="space-y-1">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
-                Style
-              </div>
-              <div className="text-sm">{logo.style}</div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
-                Brief
-              </div>
-              <p className="text-sm leading-relaxed text-white/80">
-                {logo.brief}
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
-                Palette
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {logo.palette.map((hex, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span
-                      className="h-6 w-6 ring-1 ring-white/20"
-                      style={{ backgroundColor: hex }}
-                    />
-                    <span className="text-[10px] font-mono text-white/60">
-                      {hex.toUpperCase()}
-                    </span>
+            {logo.confidential ? (
+              <div className="space-y-4">
+                <div className="rounded-lg border border-amber-500/20 bg-amber-500/5 p-4">
+                  <p className="text-sm leading-relaxed text-amber-100/80">
+                    This mark was delivered to a paying client and is under
+                    a non-disclosure agreement until the brand launches.
+                    The brief, palette, and concept notes are available to
+                    serious inquiries only.
+                  </p>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+                    Industry
                   </div>
-                ))}
+                  <div className="text-sm">{logo.industry}</div>
+                </div>
+                <div className="space-y-1">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+                    Style
+                  </div>
+                  <div className="text-sm">{logo.style}</div>
+                </div>
               </div>
-            </div>
+            ) : (
+              <>
+                <div className="space-y-1">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+                    Style
+                  </div>
+                  <div className="text-sm">{logo.style}</div>
+                </div>
 
-            <div className="space-y-2">
-              <div className="text-[10px] tracking-[0.3em] uppercase text-white/40 flex items-center gap-2">
-                <span className="h-1 w-1 rounded-full bg-gold" />
-                Concept
-              </div>
-              <p className="text-xs leading-relaxed text-white/60 font-mono border-l-2 border-gold/40 pl-3">
-                {logo.prompt}
-              </p>
-            </div>
+                <div className="space-y-2">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+                    Brief
+                  </div>
+                  <p className="text-sm leading-relaxed text-white/80">
+                    {logo.brief}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40">
+                    Palette
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {logo.palette.map((hex, i) => (
+                      <div key={i} className="flex items-center gap-2">
+                        <span
+                          className="h-6 w-6 ring-1 ring-white/20"
+                          style={{ backgroundColor: hex }}
+                        />
+                        <span className="text-[10px] font-mono text-white/60">
+                          {hex.toUpperCase()}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="text-[10px] tracking-[0.3em] uppercase text-white/40 flex items-center gap-2">
+                    <span className="h-1 w-1 rounded-full bg-gold" />
+                    Concept
+                  </div>
+                  <p className="text-xs leading-relaxed text-white/60 font-mono border-l-2 border-gold/40 pl-3">
+                    {logo.prompt}
+                  </p>
+                </div>
+              </>
+            )}
           </aside>
         </div>
       </div>

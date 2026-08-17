@@ -7,8 +7,8 @@ interface BrandMarkProps {
 }
 
 /**
- * Editorial brand mark: a serif "Y." inside a thin gold square frame.
- * Pure SVG — scales crisply at any size.
+ * The studio's own mark. Serif "Y." in a thin gold frame.
+ * SVG so it stays sharp at any size.
  */
 export function BrandMark({ className, showWordmark = true }: BrandMarkProps) {
   return (

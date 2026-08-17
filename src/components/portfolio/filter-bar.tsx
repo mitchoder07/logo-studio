@@ -23,6 +23,11 @@ interface FilterBarProps {
   visibleCount: number;
 }
 
+/**
+ * Search + filter chips. Sticks to the top of the gallery section.
+ * Industry and style chips, plus a live search box that scans
+ * name, brief, palette hex, and prompt text.
+ */
 export function FilterBar({ filters, onChange, visibleCount }: FilterBarProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 

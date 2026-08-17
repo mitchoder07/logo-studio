@@ -13,16 +13,15 @@ export function SiteFooter() {
           <div className="space-y-4 max-w-md">
             <BrandMark />
             <p className="text-sm text-muted-foreground leading-relaxed">
-              A logo portfolio presented as a working studio's case file.
-              Every mark in this catalogue is indexed, filtered, and
-              displayed using the same structure a real studio would use to
-              show its work — brief, palette, concept notes, and the mark
-              itself, all catalogued and searchable.
+              A peek inside the studio&apos;s filing cabinet. Some marks
+              here landed on real products. Others are private client work,
+              locked behind a blur until the embargo lifts. The rest are
+              ideas still looking for a home. Poke around, filter by
+              industry or style, click anything to open the full case file.
             </p>
             <p className="text-xs text-muted-foreground/70 leading-relaxed">
-              Built with Next.js 16, Tailwind CSS 4, and a careful eye for
-              editorial typography. Filter, search, and inspect any mark in
-              the lightbox.
+              Next.js 16, Tailwind CSS 4, and way too much coffee. Built
+              one quiet weekend, polished over several more.
             </p>
           </div>
 
@@ -81,7 +80,7 @@ export function SiteFooter() {
           <span>© {new Date().getFullYear()} Your Studio</span>
           <span className="flex items-center gap-2">
             <span className="h-1 w-1 rounded-full bg-gold" />
-            Catalogued · Curated · Indexed
+            Made with care, not autocomplete
           </span>
         </div>
       </div>

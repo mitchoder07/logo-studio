@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { ArrowDown } from 'lucide-react';
 import { LOGOS, INDUSTRIES, STYLES } from '@/data/logos';
 
+/**
+ * Hero section. Big serif headline, the numbers, and a CTA into the gallery.
+ */
 export function Hero() {
   const logoCount = LOGOS.length;
   const industryCount = INDUSTRIES.length;
@@ -50,12 +53,11 @@ export function Hero() {
           className="mt-8 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed animate-fade-up"
           style={{ animationDelay: '0.2s' }}
         >
-          A catalogue of {logoCount} brand marks spanning {industryCount}{' '}
-          industries and {styleCount} design styles. Each logo is composed
-          against a written brief, catalogued with its palette and concept
-          notes, and presented here as a working studio would present its
-          case file. Filter, search, and open any mark in the lightbox to
-          inspect the full rationale.
+          {logoCount} marks across {industryCount} industries and{' '}
+          {styleCount} design styles. A few are live on real products, a
+          handful are under client embargo, and the rest are ideas still
+          looking for a home. Filter, search, click any mark to see the
+          brief it was built against.
         </p>
 
         {/* Stats row */}

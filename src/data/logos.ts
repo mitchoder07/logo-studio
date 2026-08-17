@@ -1,6 +1,7 @@
 /**
- * Logo portfolio catalog.
- * Each entry is a brand mark with its design concept, palette, and brief.
+ * Studio logo catalog.
+ * Mix of live client work, embargoed client work (blurred until launch),
+ * and self-initiated marks looking for a home.
  */
 
 export type LogoStyle =
@@ -34,9 +35,11 @@ export interface Logo {
   industry: LogoIndustry;
   style: LogoStyle;
   year: number;
-  palette: string[]; // hex codes
-  prompt: string; // design concept description (used to generate the mark)
-  brief: string; // client brief the mark was designed against
+  palette: string[];
+  prompt: string;
+  brief: string;
+  /** True when the logo is under client NDA — card shows a blurred preview with a lock badge */
+  confidential?: boolean;
 }
 
 export const LOGOS: Logo[] = [
@@ -97,6 +100,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Isometric abstract building frame forming letter A, gold metallic lines on dark background, geometric perfection, gradient mesh lighting.',
     brief: 'Luxury commercial real estate firm requiring a gold-standard feel.',
+    confidential: true,
   },
   {
     slug: 'verdant-estates',
@@ -121,6 +125,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Illustrated saffron flower with three crimson stigmas, detailed botanical illustration style, warm gold and deep crimson palette, glowing center.',
     brief: 'Persian restaurant wanting the saffron flower as its hero mark.',
+    confidential: true,
   },
   {
     slug: 'brewlab-coffee',
@@ -145,6 +150,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Upward heartbeat waveform forming letter P, deep blue to cyan gradient, hyperclean vector with glow.',
     brief: 'Personal-finance app for Gen-Z needing an instantly readable health-and-wealth signal.',
+    confidential: true,
   },
   {
     slug: 'aegis-capital',
@@ -156,6 +162,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Monogram of letter A interlocked with a shield outline, metallic gold gradient, geometric perfection, glowing edges.',
     brief: 'Wealth management firm wanting to project protection and authority.',
+    confidential: true,
   },
   {
     slug: 'quantum-finance',
@@ -191,6 +198,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Geometric fox head constructed from cubic pixel blocks, neon orange to pink gradient, isometric 3D feel, hyperclean.',
     brief: 'Indie game studio needing a mascot that signals pixel craft.',
+    confidential: true,
   },
   {
     slug: 'cipher-io',
@@ -215,6 +223,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Precise blueprint-style line drawing of an abstract geometric arch, cyan lines on dark background with subtle glow, technical drafting aesthetic.',
     brief: 'Modernist architecture studio wanting a blueprint feel in the logo itself.',
+    confidential: true,
   },
   {
     slug: 'arc-studio',
@@ -239,6 +248,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Detailed geometric illustration of a mountain lion head in profile, low-poly faceted style, copper and bronze gradient, hyperclean vector.',
     brief: 'Premium outdoor apparel brand needing a fierce mascot mark.',
+    confidential: true,
   },
   {
     slug: 'foxglove-botanicals',
@@ -263,6 +273,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Elegant high-contrast serif wordmark, pure white letters on solid black background, with a single thin gold underline, refined luxury fashion branding.',
     brief: 'Parisian-inspired black-and-gold fashion house.',
+    confidential: true,
   },
   {
     slug: 'strata-apparel',
@@ -749,6 +760,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Stylized letter A with flowing aurora borealis light trails above, teal to magenta gradient, hyperclean vector with soft glow.',
     brief: 'SaaS infrastructure company wanting a mark that conveys flow and illumination.',
+    confidential: true,
   },
 
   // ── Architecture (batch 3) ─────────────────────────────────
@@ -897,6 +909,7 @@ export const LOGOS: Logo[] = [
     prompt:
       'Palm tree silhouette inside a circular sun, sunset orange to deep coral gradient, hyperclean vector emblem.',
     brief: 'Desert resort wanting a warm, iconic emblem for signage and amenities.',
+    confidential: true,
   },
 
   // ── Food & Beverage (one more, batch 3) ────────────────────
@@ -912,11 +925,7 @@ export const LOGOS: Logo[] = [
     brief: 'Sunset-facing rooftop cafe wanting a mark that captures its namesake hour.',
   },
 
-  // ════════════════════════════════════════════════════════════
-  // BACA — QUR'AN READING APP (commissioned)
-  // ════════════════════════════════════════════════════════════
-
-  // ── Baca · Concept 1 — The Open Word ───────────────────────
+  // ── Baca — two concepts explored for a Qur'an reading app ──
   {
     slug: 'baca-01-open-word',
     name: 'Baca — The Open Word',
@@ -925,12 +934,10 @@ export const LOGOS: Logo[] = [
     year: 2024,
     palette: ['#10B981', '#D4AF37', '#0A0A0A'],
     prompt:
-      'Letter B formed by two symmetrical open book pages meeting at a central vertical golden light line (the book spine doubling as a beam of light). A single small gold dot floats above the B (doubling as a guiding star and an Arabic diacritical mark). Emerald green to deep gold gradient on the book pages, pure warm gold for the vertical line and dot.',
+      'Letter B formed by two open book pages meeting at a vertical gold line. A small gold dot sits above the B, reading as both a star and an Arabic diacritical mark.',
     brief:
-      'Qur\'an reading app named "Baca" (Indonesian/Malay for "read"). Brand mark needed to work as an app icon, favicon, and dark UI header. The brief asked for something that felt editorial and iconic without resorting to the clichéd mosque-dome / crescent-moon visual language. The letter B doubles as an open book, with the gold spine-line suggesting divine light and the gold dot reading as both a guiding star and an Arabic diacritical mark.',
+      'Client wanted a mark that felt editorial and iconic without leaning on the usual mosque-dome or crescent-moon tropes. The B doubles as an open book; the gold spine reads as a beam of light; the dot above it works as a guiding star and as a diacritical mark at the same time. Used as the app icon, favicon, and dark UI header.',
   },
-
-  // ── Baca · Concept 2 — Calligraphic Flow ───────────────────
   {
     slug: 'baca-02-calligraphic-flow',
     name: 'Baca — Calligraphic Flow',
@@ -939,9 +946,83 @@ export const LOGOS: Logo[] = [
     year: 2024,
     palette: ['#10B981', '#06B6D4', '#6366F1'],
     prompt:
-      'A single continuous flowing line that traces the elegant curve of the Arabic letter ب (ba) and resolves into the silhouette of an open book — the tail of the ba becoming the page curve. One unbroken stroke, calligraphic but modern and geometric. The stroke uses a bright gradient from emerald green to cyan to indigo with a soft glowing aura, matching the Baca web app color palette.',
+      'One continuous stroke that traces the curve of the Arabic ب (ba) and resolves into an open book. The tail of the letter becomes the page curve.',
     brief:
-      'Alternative direction for the same Qur\'an reading app. This concept leans into cultural fluency — the first letter of "Baca" is also the first letter of Bismillah, so a single continuous stroke traces the curve of the Arabic ب and resolves into an open book silhouette. One unbroken calligraphic line, modern in execution but rooted in Islamic manuscript tradition. The color palette mirrors the Baca web app\'s emerald-to-cyan-to-indigo gradient.',
+      'Second concept for the same client. The first letter of "Baca" is also the first letter of Bismillah, so the whole mark is one unbroken calligraphic line that flows from the Arabic ب into a book silhouette. Colors match the live app (emerald through cyan to indigo).',
+  },
+
+  // ── Six self-initiated marks ────────────────────────────────
+  {
+    slug: 'cobalt-studio',
+    name: 'Cobalt Studio',
+    industry: 'IT & Internet',
+    style: 'Abstract Graphic',
+    year: 2024,
+    palette: ['#1E40AF', '#3B82F6', '#0A0A0A'],
+    prompt:
+      'A hexagon with a smaller rotated hexagon inside, creating a six-pointed star pattern.',
+    brief:
+      'Self-initiated mark for a fictional design studio. Wanted something that read as both a gemstone and a technical schematic.',
+  },
+  {
+    slug: 'orchid-spa',
+    name: 'Orchid Spa',
+    industry: 'Beauty & Cosmetics',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#EC4899', '#F472B6', '#D4AF37'],
+    prompt:
+      'A symmetrical geometric orchid flower with five petals and a gold center.',
+    brief:
+      'Self-initiated. Played with botanical symmetry and a soft pink-to-magenta gradient to land somewhere between a spa mark and a luxury beauty label.',
+  },
+  {
+    slug: 'grizzly-coffee',
+    name: 'Grizzly Coffee',
+    industry: 'Food & Beverage',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#92400E', '#D4A373', '#FCD34D'],
+    prompt:
+      'A geometric bear head in profile, with a coffee bean as the snout. Low-poly faceted style.',
+    brief:
+      'Self-initiated. Wanted to see how far I could push a mascot mark before it stopped reading as a serious coffee brand. The answer is: pretty far.',
+  },
+  {
+    slug: 'sapphire-realty',
+    name: 'Sapphire Realty',
+    industry: 'Real Estate',
+    style: 'Abstract Graphic',
+    year: 2024,
+    palette: ['#1E40AF', '#64748B', '#0A0A0A'],
+    prompt:
+      'A diamond formed by overlapping geometric facets, suggesting a cut gemstone.',
+    brief:
+      'Self-initiated mark for a luxury real estate concept. Wanted to lean into the gemstone metaphor without going full Versace.',
+  },
+  {
+    slug: 'pepper-gaming',
+    name: 'Pepper Gaming',
+    industry: 'Sports',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#DC2626', '#FB923C', '#FCD34D'],
+    prompt:
+      'A chili pepper shaped like a game controller, with small flames at the stem.',
+    brief:
+      'Self-initiated. A gaming brand that wanted heat. The controller-pepper hybrid was too much fun not to draw.',
+  },
+  {
+    slug: 'willow-finance',
+    name: 'Willow Finance',
+    industry: 'Financial',
+    style: 'Abstract Graphic',
+    year: 2024,
+    palette: ['#166534', '#D4AF37', '#0A0A0A'],
+    prompt:
+      'A weeping willow tree built from flowing geometric lines, with small coins as leaves.',
+    brief:
+      'Self-initiated. Played with the tension between growth (tree) and value (coins). Wanted the mark to read as calm and grounded rather than aggressive.',
   },
 ];
 
