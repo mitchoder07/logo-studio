@@ -117,18 +117,18 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
 
       {/* Main content */}
       <div
-        className="flex-1 flex items-center justify-center p-6 sm:p-12 pt-20 pb-12"
+        className="flex-1 flex items-center justify-center p-6 sm:p-12 pt-16 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center">
           {/* Image */}
-          <div className="relative aspect-square w-full max-w-[60vh] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
+          <div className="relative aspect-square w-full max-w-[55vh] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
             <Image
               src={`/logos/${logo.slug}.png`}
               alt={`${logo.name} — ${logo.style} logo for ${logo.industry}`}
               fill
               sizes="(max-width: 1024px) 90vw, 50vw"
-              className="object-contain p-4"
+              className="object-contain"
               priority
             />
           </div>

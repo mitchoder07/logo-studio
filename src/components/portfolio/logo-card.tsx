@@ -29,7 +29,7 @@ export function LogoCard({ logo, index, onOpen }: LogoCardProps) {
           alt={`${logo.name} — ${logo.style} logo for ${logo.industry}`}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1536px) 25vw, 25vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+          className="object-contain transition-transform duration-700 group-hover:scale-[1.04]"
         />
 
         {/* Overlay */}

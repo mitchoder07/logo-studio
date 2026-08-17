@@ -911,6 +911,38 @@ export const LOGOS: Logo[] = [
       'Coffee cup silhouette with a setting sun inside, warm amber and burnt orange gradient, hyperclean vector illustration with subtle steam.',
     brief: 'Sunset-facing rooftop cafe wanting a mark that captures its namesake hour.',
   },
+
+  // ════════════════════════════════════════════════════════════
+  // BACA — QUR'AN READING APP (commissioned)
+  // ════════════════════════════════════════════════════════════
+
+  // ── Baca · Concept 1 — The Open Word ───────────────────────
+  {
+    slug: 'baca-01-open-word',
+    name: 'Baca — The Open Word',
+    industry: 'Education',
+    style: 'Lettermark',
+    year: 2024,
+    palette: ['#10B981', '#D4AF37', '#0A0A0A'],
+    prompt:
+      'Letter B formed by two symmetrical open book pages meeting at a central vertical golden light line (the book spine doubling as a beam of light). A single small gold dot floats above the B (doubling as a guiding star and an Arabic diacritical mark). Emerald green to deep gold gradient on the book pages, pure warm gold for the vertical line and dot.',
+    brief:
+      'Qur\'an reading app named "Baca" (Indonesian/Malay for "read"). Brand mark needed to work as an app icon, favicon, and dark UI header. The brief asked for something that felt editorial and iconic without resorting to the clichéd mosque-dome / crescent-moon visual language. The letter B doubles as an open book, with the gold spine-line suggesting divine light and the gold dot reading as both a guiding star and an Arabic diacritical mark.',
+  },
+
+  // ── Baca · Concept 2 — Calligraphic Flow ───────────────────
+  {
+    slug: 'baca-02-calligraphic-flow',
+    name: 'Baca — Calligraphic Flow',
+    industry: 'Education',
+    style: 'Lettermark',
+    year: 2024,
+    palette: ['#10B981', '#06B6D4', '#6366F1'],
+    prompt:
+      'A single continuous flowing line that traces the elegant curve of the Arabic letter ب (ba) and resolves into the silhouette of an open book — the tail of the ba becoming the page curve. One unbroken stroke, calligraphic but modern and geometric. The stroke uses a bright gradient from emerald green to cyan to indigo with a soft glowing aura, matching the Baca web app color palette.',
+    brief:
+      'Alternative direction for the same Qur\'an reading app. This concept leans into cultural fluency — the first letter of "Baca" is also the first letter of Bismillah, so a single continuous stroke traces the curve of the Arabic ب and resolves into an open book silhouette. One unbroken calligraphic line, modern in execution but rooted in Islamic manuscript tradition. The color palette mirrors the Baca web app\'s emerald-to-cyan-to-indigo gradient.',
+  },
 ];
 
 export const INDUSTRIES: LogoIndustry[] = [
