@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { BrandMark } from './brand-mark';
+import { DeveloperLink } from './developer-link';
+import { NewsletterForm } from './newsletter-form';
 
 export function SiteFooter() {
   return (
@@ -65,14 +67,7 @@ export function SiteFooter() {
             </div>
             <ul className="space-y-2 text-sm">
               <li>
-                <a
-                  href="https://up1n-portfolio.vercel.app"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-foreground hover:text-gold transition-colors"
-                >
-                  Meet the Developer
-                </a>
+                <DeveloperLink />
               </li>
               <li className="text-foreground">2024 — Present</li>
               <li className="text-muted-foreground">
@@ -83,6 +78,14 @@ export function SiteFooter() {
               </li>
             </ul>
           </div>
+        </div>
+
+        {/* Newsletter */}
+        <div className="mt-14 pt-10 border-t border-border">
+          <div className="text-[10px] tracking-[0.3em] uppercase text-muted-foreground mb-3">
+            New Logo Alerts
+          </div>
+          <NewsletterForm />
         </div>
 
         {/* Bottom strip */}

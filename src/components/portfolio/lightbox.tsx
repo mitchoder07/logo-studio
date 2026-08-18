@@ -3,7 +3,8 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Lock } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { X, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Logo } from '@/data/logos';
 
@@ -15,6 +16,24 @@ interface LightboxProps {
   onNavigate: (direction: 1 | -1) => void;
 }
 
+// Page-turn variants — the outgoing logo rotates away like the front of a
+// sheet of paper flipping over, the incoming one rotates in from the other
+// side like its back/next page settling into place.
+const pageVariants = {
+  enter: (dir: 1 | -1) => ({
+    rotateY: dir === 1 ? 90 : -90,
+    opacity: 0,
+  }),
+  center: {
+    rotateY: 0,
+    opacity: 1,
+  },
+  exit: (dir: 1 | -1) => ({
+    rotateY: dir === 1 ? -90 : 90,
+    opacity: 0,
+  }),
+};
+
 /**
  * Full-screen lightbox. Opens when a logo card is clicked.
  * Esc, arrow keys, and prev/next buttons all work.
@@ -24,10 +43,8 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
-  // Track nav direction + a bump key so the "page turn" animation replays
-  // every time the logo changes, but not on the very first open.
+  // Which way we're navigating, so the flip rotates the right direction.
   const [direction, setDirection] = React.useState<1 | -1>(1);
-  const [flipKey, setFlipKey] = React.useState(0);
   const prevIndexRef = React.useRef<number | null>(null);
   const scrollRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
@@ -37,7 +54,6 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
     }
     if (prevIndexRef.current !== null && prevIndexRef.current !== index) {
       setDirection(index > prevIndexRef.current ? 1 : -1);
-      setFlipKey((k) => k + 1);
     }
     prevIndexRef.current = index;
     // Reset scroll position for the new logo (imperative DOM op, not state).
@@ -51,24 +67,6 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
     },
     [onNavigate]
   );
-
-  // Scroll-down / scroll-up toggle for the content area (mobile mainly,
-  // where the image + full write-up is taller than the viewport). The
-  // chevron direction tracks real scroll position, updated on scroll.
-  const [scrolledDown, setScrolledDown] = React.useState(false);
-  const handleScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
-    setScrolledDown(nearBottom);
-  };
-  const toggleScroll = () => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const goingDown = !scrolledDown;
-    el.scrollTo({ top: goingDown ? el.scrollHeight : 0, behavior: 'smooth' });
-    setScrolledDown(goingDown);
-  };
 
   // Stop the page from scrolling behind the lightbox
   React.useEffect(() => {
@@ -172,23 +170,30 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           getting cut off on mobile and short desktop windows). */}
       <div
         ref={scrollRef}
-        onScroll={handleScroll}
         className="flex-1 overflow-y-auto overscroll-contain flex items-center justify-center p-6 sm:p-12 pt-16 pb-8 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          key={flipKey}
-          className={cn(
-            'grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center py-4',
-            flipKey > 0 && (direction === 1 ? 'animate-page-next' : 'animate-page-prev')
-          )}
+          className="relative w-full max-w-6xl"
+          style={{ perspective: 1600 }}
         >
+          <AnimatePresence mode="popLayout" custom={direction} initial={false}>
+            <motion.div
+              key={logo.slug}
+              custom={direction}
+              variants={pageVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              style={{ transformStyle: 'preserve-3d', backfaceVisibility: 'hidden' }}
+              className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 w-full items-center py-4"
+            >
           {/* Image — sized off fixed breakpoints instead of vh, so it no
               longer shrinks/squishes unpredictably between mobile and
               desktop viewports. */}
           <div className="relative aspect-square w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[560px] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
             <Image
-              key={logo.slug}
               src={`/logos/${logo.slug}.png`}
               alt={
                 logo.confidential
@@ -198,10 +203,9 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
               fill
               sizes="(max-width: 1024px) 90vw, 50vw"
               className={cn(
-                'object-contain duration-200 ease-out animate-fade-up',
+                'object-contain',
                 logo.confidential && 'blur-xl brightness-50'
               )}
-              style={{ animationDuration: '0.15s' }}
               priority
             />
             {logo.confidential && (
@@ -314,25 +318,20 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
               </>
             )}
           </aside>
-        </div>
+            </motion.div>
+          </AnimatePresence>
 
-        {/* Scroll down/up toggle — only needed in the stacked (mobile)
-            layout where image + write-up can be taller than the screen. */}
-        <button
-          type="button"
-          aria-label={scrolledDown ? 'Scroll back up' : 'Scroll down'}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleScroll();
-          }}
-          className="lg:hidden fixed bottom-6 right-5 z-30 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 backdrop-blur-md hover:border-gold transition-colors"
-        >
-          {scrolledDown ? (
-            <ChevronUp className="h-5 w-5 text-white" strokeWidth={1.5} />
-          ) : (
-            <ChevronDown className="h-5 w-5 text-white" strokeWidth={1.5} />
-          )}
-        </button>
+          {/* Subtle sheen that peaks mid-flip, like light catching the
+              back of a page as it turns. */}
+          <motion.div
+            key={`sheen-${logo.slug}`}
+            aria-hidden
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0, 0.16, 0] }}
+            transition={{ duration: 0.5, ease: 'easeInOut' }}
+            className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent"
+          />
+        </div>
       </div>
     </div>,
     document.body

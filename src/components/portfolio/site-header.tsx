@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { BrandMark } from './brand-mark';
 import { ThemeToggle } from './theme-toggle';
+import { DeveloperLink } from './developer-link';
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = React.useState(false);
@@ -58,14 +59,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <a
-            href="https://up1n-portfolio.vercel.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden sm:inline text-[10px] tracking-[0.3em] uppercase text-muted-foreground hover:text-gold transition-colors"
-          >
-            Meet the Developer
-          </a>
+          <DeveloperLink className="hidden sm:inline-flex" />
           <span className="hidden lg:inline h-3 w-px bg-border" />
           <span className="hidden lg:inline text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
             Est. 2024
