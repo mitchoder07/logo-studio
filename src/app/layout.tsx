@@ -26,6 +26,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://logostudi0.vercel.app";
+
 export const metadata: Metadata = {
   title: "Your Studio — Logo Portfolio",
   description:
@@ -39,6 +41,7 @@ export const metadata: Metadata = {
     "brand marks",
   ],
   authors: [{ name: "Your Studio" }],
+  metadataBase: new URL(siteUrl),
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -47,18 +50,24 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
+  alternates: {
+    canonical: siteUrl,
+  },
   openGraph: {
     title: "Your Studio — Logo Portfolio",
     description:
       "80 brand marks across 13 industries and 8 design styles. Filter, search, and inspect each logo's palette, brief, and concept notes.",
     siteName: "Your Studio",
     type: "website",
+    url: siteUrl,
     images: [
       {
-        url: "/og-image.png",
+        url: `${siteUrl}/og-image.png`,
+        secureUrl: `${siteUrl}/og-image.png`,
         width: 1200,
         height: 630,
         alt: "Your Studio — Logo Portfolio",
+        type: "image/png",
       },
     ],
   },
@@ -67,7 +76,7 @@ export const metadata: Metadata = {
     title: "Your Studio — Logo Portfolio",
     description:
       "80 brand marks across 13 industries and 8 design styles. Filter, search, and inspect each logo's palette, brief, and concept notes.",
-    images: ["/og-image.png"],
+    images: [`${siteUrl}/og-image.png`],
   },
 };
 

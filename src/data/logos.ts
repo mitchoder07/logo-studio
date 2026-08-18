@@ -1024,6 +1024,68 @@ export const LOGOS: Logo[] = [
     brief:
       'Self-initiated. Played with the tension between growth (tree) and value (coins). Wanted the mark to read as calm and grounded rather than aggressive.',
   },
+
+  // ── Japanese-inspired marks ─────────────────────────────────
+  {
+    slug: 'ronin-ramen',
+    name: 'Ronin Ramen',
+    industry: 'Food & Beverage',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#1E3A8A', '#D4AF37', '#0A0A0A'],
+    prompt:
+      'A samurai helmet (kabuto) where the face guard opens to reveal a steaming bowl of ramen.',
+    brief:
+      'Ramen shop wanting a mark that nods to Japanese warrior culture without being aggressive. The kabuto opens like a visor to show the ramen inside — strength serving comfort.',
+  },
+  {
+    slug: 'koi-sushi',
+    name: 'Koi Sushi',
+    industry: 'Food & Beverage',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#1E3A8A', '#FB923C', '#0A0A0A'],
+    prompt:
+      'A koi fish silhouette where the body curves into the shape of a sushi roll.',
+    brief:
+      'Sushi restaurant wanting a mark that pairs the koi (luck and perseverance) with their core product. The fish and the roll share one continuous line.',
+  },
+  {
+    slug: 'sakura-bloom',
+    name: 'Sakura Bloom',
+    industry: 'Beauty & Cosmetics',
+    style: 'Abstract Graphic',
+    year: 2024,
+    palette: ['#FBCFE8', '#D4AF37', '#0A0A0A'],
+    prompt:
+      'A single cherry blossom with five petals, where the center is a tea cup silhouette.',
+    brief:
+      'Tea ceremony brand wanting a mark that sits between beauty and ritual. The sakura petals frame a hidden tea cup — you see the flower first, the cup second.',
+  },
+  {
+    slug: 'kitsune-izakaya',
+    name: 'Kitsune Izakaya',
+    industry: 'Food & Beverage',
+    style: 'Emblem',
+    year: 2024,
+    palette: ['#FFFFFF', '#DC2626', '#0A0A0A'],
+    prompt:
+      'A Noh theater fox mask where the eyes are two small sake bottles.',
+    brief:
+      'Izakaya wanting a mark that carries a bit of mystery. The kitsune (fox) is a trickster spirit in Japanese folklore — the sake bottle eyes hint at what the place serves.',
+  },
+  {
+    slug: 'tanuki-burger',
+    name: 'Tanuki Burger',
+    industry: 'Food & Beverage',
+    style: 'Illustrated Graphic',
+    year: 2024,
+    palette: ['#92400E', '#FCD34D', '#0A0A0A'],
+    prompt:
+      'A tanuki (raccoon dog) wearing a chef hat and headband, holding a kitchen knife.',
+    brief:
+      'Japanese burger restaurant wanting a mascot mark with personality. The tanuki is the patron spirit of casual eating in Japan — playful, generous, a little chaotic.',
+  },
 ];
 
 export const INDUSTRIES: LogoIndustry[] = [
