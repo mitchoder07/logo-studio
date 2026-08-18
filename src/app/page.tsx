@@ -83,7 +83,13 @@ export default function Home() {
         logos={filtered}
         index={lightboxIndex}
         onClose={() => setLightboxIndex(null)}
-        onNavigate={setLightboxIndex}
+        onNavigate={(direction) =>
+          setLightboxIndex((current) => {
+            if (current === null) return current;
+            const next = current + direction;
+            return Math.max(0, Math.min(filtered.length - 1, next));
+          })
+        }
       />
     </div>
   );
