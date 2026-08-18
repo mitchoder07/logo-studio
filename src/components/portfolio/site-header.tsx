@@ -58,7 +58,16 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <span className="hidden sm:inline text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
+          <a
+            href="https://up1n-portfolio.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline text-[10px] tracking-[0.3em] uppercase text-muted-foreground hover:text-gold transition-colors"
+          >
+            Meet the Developer
+          </a>
+          <span className="hidden lg:inline h-3 w-px bg-border" />
+          <span className="hidden lg:inline text-[10px] tracking-[0.3em] uppercase text-muted-foreground">
             Est. 2024
           </span>
           <ThemeToggle />
