@@ -11,7 +11,8 @@ interface LightboxProps {
   logos: Logo[];
   index: number | null;
   onClose: () => void;
-  onNavigate: (next: number) => void;
+  /** Step the current index by +1 or -1. Bounds-checking happens in the parent. */
+  onNavigate: (direction: 1 | -1) => void;
 }
 
 /**
@@ -38,9 +39,8 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
     if (index === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      else if (e.key === 'ArrowLeft' && index > 0) onNavigate(index - 1);
-      else if (e.key === 'ArrowRight' && index < logos.length - 1)
-        onNavigate(index + 1);
+      else if (e.key === 'ArrowLeft' && index > 0) onNavigate(-1);
+      else if (e.key === 'ArrowRight' && index < logos.length - 1) onNavigate(1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -90,7 +90,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           aria-label="Previous logo"
           onClick={(e) => {
             e.stopPropagation();
-            onNavigate(index - 1);
+            onNavigate(-1);
           }}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-full w-16 sm:w-24 flex items-center justify-center group"
         >
@@ -108,7 +108,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           aria-label="Next logo"
           onClick={(e) => {
             e.stopPropagation();
-            onNavigate(index + 1);
+            onNavigate(1);
           }}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-full w-16 sm:w-24 flex items-center justify-center group"
         >
@@ -121,15 +121,20 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
         </button>
       )}
 
-      {/* Main content */}
+      {/* Main content — scrolls internally so nothing gets clipped when it
+          doesn't fit the viewport (this was the cause of the logo/image
+          getting cut off on mobile and short desktop windows). */}
       <div
-        className="flex-1 flex items-center justify-center p-6 sm:p-12 pt-16 pb-8"
+        className="flex-1 overflow-y-auto overscroll-contain flex items-center justify-center p-6 sm:p-12 pt-16 pb-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center">
-          {/* Image */}
-          <div className="relative aspect-square w-full max-w-[55vh] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
+        <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center py-4">
+          {/* Image — sized off fixed breakpoints instead of vh, so it no
+              longer shrinks/squishes unpredictably between mobile and
+              desktop viewports. */}
+          <div className="relative aspect-square w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[560px] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
             <Image
+              key={logo.slug}
               src={`/logos/${logo.slug}.png`}
               alt={
                 logo.confidential
@@ -139,9 +144,10 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
               fill
               sizes="(max-width: 1024px) 90vw, 50vw"
               className={cn(
-                'object-contain',
+                'object-contain duration-200 ease-out animate-fade-up',
                 logo.confidential && 'blur-xl brightness-50'
               )}
+              style={{ animationDuration: '0.15s' }}
               priority
             />
             {logo.confidential && (
@@ -160,7 +166,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           </div>
 
           {/* Info panel */}
-          <aside className="text-white space-y-6 max-h-[70vh] overflow-y-auto pr-1">
+          <aside className="text-white space-y-6 lg:max-h-[70vh] lg:overflow-y-auto pr-1">
             <div>
               <div className="text-[10px] tracking-[0.3em] uppercase text-gold mb-2 flex items-center gap-2">
                 {logo.industry} · {logo.year}
