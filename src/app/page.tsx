@@ -8,6 +8,7 @@ import { LogoCard } from '@/components/portfolio/logo-card';
 import { Lightbox } from '@/components/portfolio/lightbox';
 import { EmptyState } from '@/components/portfolio/empty-state';
 import { SiteFooter } from '@/components/portfolio/site-footer';
+import { ScrollToggle } from '@/components/portfolio/scroll-toggle';
 import { LOGOS, type Logo, type LogoIndustry, type LogoStyle } from '@/data/logos';
 
 interface Filters {
@@ -78,6 +79,7 @@ export default function Home() {
       </main>
 
       <SiteFooter />
+      <ScrollToggle />
 
       <Lightbox
         logos={filtered}

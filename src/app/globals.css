@@ -195,29 +195,16 @@
   animation: fade-up 0.6s ease-out backwards;
 }
 
-/* Lightbox "page turn" — like flipping to the next/prev page of a book
-   when navigating between logos. */
-@keyframes page-turn-next {
-  0% { transform: perspective(1400px) rotateY(-28deg) scale(0.94); opacity: 0; }
-  60% { transform: perspective(1400px) rotateY(5deg) scale(1.01); opacity: 1; }
-  100% { transform: perspective(1400px) rotateY(0deg) scale(1); opacity: 1; }
+/* Ambient glow behind "Meet the Developer" */
+@keyframes aura-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.12); }
 }
-@keyframes page-turn-prev {
-  0% { transform: perspective(1400px) rotateY(28deg) scale(0.94); opacity: 0; }
-  60% { transform: perspective(1400px) rotateY(-5deg) scale(1.01); opacity: 1; }
-  100% { transform: perspective(1400px) rotateY(0deg) scale(1); opacity: 1; }
-}
-.animate-page-next {
-  animation: page-turn-next 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transform-origin: left center;
-}
-.animate-page-prev {
-  animation: page-turn-prev 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  transform-origin: right center;
+.animate-aura-pulse {
+  animation: aura-pulse 3s ease-in-out infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .animate-page-next,
-  .animate-page-prev {
+  .animate-aura-pulse {
     animation: none;
   }
 }
