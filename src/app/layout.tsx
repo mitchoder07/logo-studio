@@ -39,18 +39,35 @@ export const metadata: Metadata = {
     "brand marks",
   ],
   authors: [{ name: "Your Studio" }],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
   openGraph: {
     title: "Your Studio — Logo Portfolio",
     description:
-      "A logo portfolio of brand marks across 13 industries and 8 design styles.",
+      "80 brand marks across 13 industries and 8 design styles. Filter, search, and inspect each logo's palette, brief, and concept notes.",
     siteName: "Your Studio",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Your Studio — Logo Portfolio",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Your Studio — Logo Portfolio",
     description:
-      "A logo portfolio of brand marks across 13 industries and 8 design styles.",
+      "80 brand marks across 13 industries and 8 design styles. Filter, search, and inspect each logo's palette, brief, and concept notes.",
+    images: ["/og-image.png"],
   },
 };
 
