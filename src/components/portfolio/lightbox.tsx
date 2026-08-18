@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Image from 'next/image';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ChevronDown, ChevronUp, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Logo } from '@/data/logos';
 
@@ -24,6 +24,52 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
   const [mounted, setMounted] = React.useState(false);
   React.useEffect(() => setMounted(true), []);
 
+  // Track nav direction + a bump key so the "page turn" animation replays
+  // every time the logo changes, but not on the very first open.
+  const [direction, setDirection] = React.useState<1 | -1>(1);
+  const [flipKey, setFlipKey] = React.useState(0);
+  const prevIndexRef = React.useRef<number | null>(null);
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    if (index === null) {
+      prevIndexRef.current = null;
+      return;
+    }
+    if (prevIndexRef.current !== null && prevIndexRef.current !== index) {
+      setDirection(index > prevIndexRef.current ? 1 : -1);
+      setFlipKey((k) => k + 1);
+    }
+    prevIndexRef.current = index;
+    // Reset scroll position for the new logo (imperative DOM op, not state).
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [index]);
+
+  const navigate = React.useCallback(
+    (dir: 1 | -1) => {
+      setDirection(dir);
+      onNavigate(dir);
+    },
+    [onNavigate]
+  );
+
+  // Scroll-down / scroll-up toggle for the content area (mobile mainly,
+  // where the image + full write-up is taller than the viewport). The
+  // chevron direction tracks real scroll position, updated on scroll.
+  const [scrolledDown, setScrolledDown] = React.useState(false);
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const nearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 24;
+    setScrolledDown(nearBottom);
+  };
+  const toggleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const goingDown = !scrolledDown;
+    el.scrollTo({ top: goingDown ? el.scrollHeight : 0, behavior: 'smooth' });
+    setScrolledDown(goingDown);
+  };
+
   // Stop the page from scrolling behind the lightbox
   React.useEffect(() => {
     if (index === null) return;
@@ -39,12 +85,12 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
     if (index === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
-      else if (e.key === 'ArrowLeft' && index > 0) onNavigate(-1);
-      else if (e.key === 'ArrowRight' && index < logos.length - 1) onNavigate(1);
+      else if (e.key === 'ArrowLeft' && index > 0) navigate(-1);
+      else if (e.key === 'ArrowRight' && index < logos.length - 1) navigate(1);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [index, logos.length, onClose, onNavigate]);
+  }, [index, logos.length, onClose, navigate]);
 
   if (!mounted || index === null) return null;
 
@@ -90,7 +136,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           aria-label="Previous logo"
           onClick={(e) => {
             e.stopPropagation();
-            onNavigate(-1);
+            navigate(-1);
           }}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 h-full w-16 sm:w-24 flex items-center justify-center group"
         >
@@ -108,7 +154,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           aria-label="Next logo"
           onClick={(e) => {
             e.stopPropagation();
-            onNavigate(1);
+            navigate(1);
           }}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 h-full w-16 sm:w-24 flex items-center justify-center group"
         >
@@ -125,10 +171,18 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           doesn't fit the viewport (this was the cause of the logo/image
           getting cut off on mobile and short desktop windows). */}
       <div
-        className="flex-1 overflow-y-auto overscroll-contain flex items-center justify-center p-6 sm:p-12 pt-16 pb-8"
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex-1 overflow-y-auto overscroll-contain flex items-center justify-center p-6 sm:p-12 pt-16 pb-8 relative"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center py-4">
+        <div
+          key={flipKey}
+          className={cn(
+            'grid lg:grid-cols-[1fr_360px] gap-8 lg:gap-12 max-w-6xl w-full items-center py-4',
+            flipKey > 0 && (direction === 1 ? 'animate-page-next' : 'animate-page-prev')
+          )}
+        >
           {/* Image — sized off fixed breakpoints instead of vh, so it no
               longer shrinks/squishes unpredictably between mobile and
               desktop viewports. */}
@@ -261,6 +315,24 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
             )}
           </aside>
         </div>
+
+        {/* Scroll down/up toggle — only needed in the stacked (mobile)
+            layout where image + write-up can be taller than the screen. */}
+        <button
+          type="button"
+          aria-label={scrolledDown ? 'Scroll back up' : 'Scroll down'}
+          onClick={(e) => {
+            e.stopPropagation();
+            toggleScroll();
+          }}
+          className="lg:hidden fixed bottom-6 right-5 z-30 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-black/70 backdrop-blur-md hover:border-gold transition-colors"
+        >
+          {scrolledDown ? (
+            <ChevronUp className="h-5 w-5 text-white" strokeWidth={1.5} />
+          ) : (
+            <ChevronDown className="h-5 w-5 text-white" strokeWidth={1.5} />
+          )}
+        </button>
       </div>
     </div>,
     document.body
