@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Logo } from '@/data/logos';
+import { Watermark } from './watermark';
 
 interface LogoCardProps {
   logo: Logo;
@@ -28,9 +29,10 @@ export function LogoCard({ logo, index, onOpen }: LogoCardProps) {
     >
       <div
         className={cn(
-          'relative aspect-square overflow-hidden bg-card border border-border',
+          'relative aspect-square overflow-hidden bg-card border border-border select-none',
           'transition-all duration-500 group-hover:border-gold'
         )}
+        onContextMenu={(e) => e.preventDefault()}
       >
         <Image
           src={`/logos/${logo.slug}.png`}
@@ -40,12 +42,14 @@ export function LogoCard({ logo, index, onOpen }: LogoCardProps) {
               : `${logo.name} — ${logo.style} logo for ${logo.industry}`
           }
           fill
+          draggable={false}
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1536px) 25vw, 25vw"
           className={cn(
             'object-contain transition-transform duration-700 group-hover:scale-[1.04]',
             isConfidential && 'blur-lg brightness-50 group-hover:blur-md'
           )}
         />
+        <Watermark />
 
         {/* Hover overlay for non-confidential */}
         {!isConfidential && (
