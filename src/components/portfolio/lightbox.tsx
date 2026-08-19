@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Logo } from '@/data/logos';
+import { Watermark } from './watermark';
 
 interface LightboxProps {
   logos: Logo[];
@@ -192,7 +193,10 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
           {/* Image — sized off fixed breakpoints instead of vh, so it no
               longer shrinks/squishes unpredictably between mobile and
               desktop viewports. */}
-          <div className="relative aspect-square w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[560px] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden">
+          <div
+            className="relative aspect-square w-full max-w-[420px] sm:max-w-[480px] lg:max-w-[560px] mx-auto bg-white/[0.02] border border-white/10 overflow-hidden select-none"
+            onContextMenu={(e) => e.preventDefault()}
+          >
             <Image
               src={`/logos/${logo.slug}.png`}
               alt={
@@ -201,6 +205,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
                   : `${logo.name} — ${logo.style} logo for ${logo.industry}`
               }
               fill
+              draggable={false}
               sizes="(max-width: 1024px) 90vw, 50vw"
               className={cn(
                 'object-contain',
@@ -208,6 +213,7 @@ export function Lightbox({ logos, index, onClose, onNavigate }: LightboxProps) {
               )}
               priority
             />
+            <Watermark />
             {logo.confidential && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="flex flex-col items-center gap-3 rounded-2xl border border-amber-500/40 bg-black/60 px-8 py-6 backdrop-blur-md">

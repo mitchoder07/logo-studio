@@ -93,7 +93,7 @@ export function SiteFooter() {
           <span>© {new Date().getFullYear()} Your Studio</span>
           <span className="flex items-center gap-2">
             <span className="h-1 w-1 rounded-full bg-gold" />
-            Made with care, not autocomplete
+            Made with stationery, junk foods & Adobe
           </span>
         </div>
       </div>
