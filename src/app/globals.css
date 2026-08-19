@@ -157,22 +157,20 @@
   background: var(--gold);
 }
 
-/* Masonry layout via CSS columns */
+/* Responsive grid — even distribution, no column-break gaps at the end */
 .masonry-grid {
-  column-gap: 1.25rem;
-}
-.masonry-grid > * {
-  break-inside: avoid;
-  margin-bottom: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.25rem;
 }
 @media (min-width: 640px) {
-  .masonry-grid { column-count: 2; }
+  .masonry-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (min-width: 1024px) {
-  .masonry-grid { column-count: 3; }
+  .masonry-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (min-width: 1536px) {
-  .masonry-grid { column-count: 4; }
+  .masonry-grid { grid-template-columns: repeat(4, 1fr); }
 }
 
 /* Editorial accent text */
@@ -193,6 +191,20 @@
 }
 .animate-fade-up {
   animation: fade-up 0.6s ease-out backwards;
+}
+
+/* Ambient glow behind "Meet the Developer" */
+@keyframes aura-pulse {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50% { opacity: 0.75; transform: scale(1.12); }
+}
+.animate-aura-pulse {
+  animation: aura-pulse 3s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-aura-pulse {
+    animation: none;
+  }
 }
 
 @keyframes slow-zoom {
