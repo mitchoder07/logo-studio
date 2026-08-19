@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Set these in your Vercel project's Environment Variables:
+//   RESEND_API_KEY      — from Resend dashboard → API Keys
+//   RESEND_AUDIENCE_ID   — optional, from Resend dashboard → Audiences
+//                          (only needed if you want new subscribers
+//                          automatically grouped into a specific list;
+//                          Resend Contacts are global by default now)
 export async function POST(request: Request) {
   let email: unknown;
   try {
@@ -17,19 +23,44 @@ export async function POST(request: Request) {
     );
   }
 
-  // TODO: this currently just validates and acknowledges the request — it
-  // does not store the subscriber or send anything. To make this live,
-  // wire it up to a real email provider, e.g.:
-  //
-  //   - Resend (resend.com) + their Audiences API — simplest for a
-  //     Vercel-hosted Next.js app, has a generous free tier.
-  //   - Buttondown, ConvertKit, or Mailchimp — good if you want a hosted
-  //     "compose and send" UI for the actual new-logo announcement email.
-  //
-  // Whichever you pick, you'll add their SDK/API call here, store the
-  // provider's API key as a Vercel environment variable, and then trigger
-  // a "new logo" campaign from their dashboard (or another API call) each
-  // time you add a logo.
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.error('Missing RESEND_API_KEY env var.');
+    return NextResponse.json(
+      { error: 'Subscriptions are not set up yet — try again soon.' },
+      { status: 500 }
+    );
+  }
+
+  const audienceId = process.env.RESEND_AUDIENCE_ID;
+  const payload: Record<string, unknown> = { email, unsubscribed: false };
+  if (audienceId) payload.audience_id = audienceId;
+
+  const res = await fetch('https://api.resend.com/contacts', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    // Treat "already subscribed" as a success from the visitor's POV.
+    const already =
+      res.status === 409 ||
+      String(body?.message ?? '')
+        .toLowerCase()
+        .includes('already');
+    if (already) return NextResponse.json({ ok: true });
+
+    console.error('Resend error:', res.status, body);
+    return NextResponse.json(
+      { error: 'Something went wrong. Try again.' },
+      { status: 502 }
+    );
+  }
 
   return NextResponse.json({ ok: true });
 }
